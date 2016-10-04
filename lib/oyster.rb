@@ -1,5 +1,5 @@
 class Oyster
-  attr_reader :balance, :limit
+  attr_reader :balance, :limit, :entry_station, :exit_station
 
   MAXIMUM_LIMIT = 90
   MIN_BALANCE = 1
@@ -14,18 +14,23 @@ class Oyster
     return @balance
   end
 
-  def touch_in
+  def touch_in(entry_station)
     raise "Insufficient balance to travel" if @balance < MIN_BALANCE
-    @in_journey = true
+    @entry_station = entry_station
+
   end
 
-  def touch_out
+  def touch_out(exit_station)
     deduct(2)
-    @in_journey = false
+    @exit_station = exit_station
+    @entry_station = nil
+    @exit_station
+
+
   end
 
   def in_journey?
-    @in_journey
+    !!entry_station
   end
 
   private
