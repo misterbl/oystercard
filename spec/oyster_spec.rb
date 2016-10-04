@@ -23,19 +23,7 @@ describe Oyster do
     end
   end
 
-    describe "#deduct" do
-      context "when paying for a journey" do
-        it "deducts money" do
-        before = subject.top_up(30)
-        expect(subject.deduct(10)).to eq before - 10
-      end
-    end
 
-      context "when deducting below 0" do
-        it "raises an error" do
-        expect{subject.deduct(1)}.to raise_error "Cannot enter minus numbers"
-      end
-    end
 
     describe "#touch in" do
         it { is_expected.to respond_to(:touch_in) }
@@ -59,11 +47,12 @@ describe Oyster do
         subject.touch_out
         expect(subject).not_to be_in_journey
         end
+        it "expects touch out to reduce balance by 'fare'" do
+          expect {subject.touch_out}.to change{subject.balance}.by(-2)
+        end
     end
 
       describe "#in_journey?" do
         it { is_expected.to respond_to(:in_journey?) }
       end
-
     end
-  end
