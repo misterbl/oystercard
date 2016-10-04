@@ -2,32 +2,29 @@ require 'oyster'
 
 describe Oyster do
 
-    context "when initialized" do
-      it "has a default balance" do
+  context "when initialized" do
+    it "has a default balance" do
       expect(subject.balance).to eq 0
-      end
-      it "has an empty list of journeys by default" do
-      expect(subject.journeys).to be_empty
     end
   end
 
-describe "#top_up" do
+  describe "#top_up" do
       context "when given a value" do
       it "adds value to balance" do
-      before = subject.balance
-      expect(subject.top_up(10)).to eq before + 10
+        before = subject.balance
+        expect(subject.top_up(10)).to eq before + 10
       end
     end
 
       context "when value given exceeds the limit" do
       it "raises an error" do
-      subject.top_up(90)
-      expect{subject.top_up(1)}.to raise_error "Amount exceeds limit"
+        subject.top_up(90)
+        expect{subject.top_up(1)}.to raise_error "Amount exceeds limit"
       end
     end
   end
 
-  describe "#touch in" do
+    describe "#touch in" do
       let(:entry_station) {double :entry_station}
         it { is_expected.to respond_to(:touch_in).with(1).argument}
         it "expects touch in to start a journey" do
@@ -41,13 +38,6 @@ describe "#top_up" do
         subject.top_up(30)
         expect(subject.touch_in(entry_station)).to eq(entry_station)
         end
-
-  describe "journey" do
-      let(:entry_station) {double :entry_station}
-      let(:exit_station) {double :exit_station}
-      subject { { :start => entry_station, :finish => exit_station } }
-      it { should include(:start => entry_station, :finish => exit_station)   }
-    end
 
     describe "Insufficient fund error" do
       let(:entry_station) {double :entry_station}

@@ -1,9 +1,12 @@
 require 'station'
 
 describe Station do
-  it "initialized a new station with name and zone" do
-    expect(subject.name).to be(@name)
-    expect(subject.zone).to be(@zone)
+  subject {described_class.new("Oxford Circus", 1)}
+  it "knows station's name" do
+    expect(subject.name).to eq("Oxford Circus")
   end
 
+  it "knows station's zone" do
+    expect(subject.zone).to eq(1)
+  end
 end

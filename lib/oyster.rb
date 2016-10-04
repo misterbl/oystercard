@@ -1,3 +1,5 @@
+require 'journey'
+
 class Oyster
   attr_reader :balance, :limit, :entry_station, :exit_station, :journeys
 
@@ -6,7 +8,6 @@ class Oyster
 
   def initialize
     @balance = 0
-    @journeys = []
   end
 
   def top_up(amount)
@@ -18,17 +19,13 @@ class Oyster
   def touch_in(entry_station)
     raise "Insufficient balance to travel" if @balance < MIN_BALANCE
     @entry_station = entry_station
-    @journey = {}
-    @journey[:start] = entry_station
   end
 
   def touch_out(exit_station)
     deduct(2)
     @exit_station = exit_station
     @entry_station = nil
-    @journey[:finish] = exit_station
-    @journeys << @journey
-    @exit_station #leave at end
+    @exit_station
   end
 
   def in_journey?
