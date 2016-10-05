@@ -3,16 +3,16 @@ require 'oyster'
 describe Oyster do
 
   context "when initialized" do
-    it "has a default balance" do
+      it "has a default balance" do
       expect(subject.balance).to eq 0
-    end
+      end
   end
 
   describe "#top_up" do
       context "when given a value" do
       it "adds value to balance" do
-        before = subject.balance
-        expect(subject.top_up(10)).to eq before + 10
+      before = subject.balance
+      expect(subject.top_up(10)).to eq before + 10
       end
     end
 
@@ -32,7 +32,7 @@ describe Oyster do
         subject.touch_in(entry_station)
         expect(subject).to be_in_journey
         end
-    end
+      end
         let(:entry_station) {double :entry_station}
         it "Record the entry station" do
         subject.top_up(30)
