@@ -1,72 +1,60 @@
 require 'oyster'
 
 describe Oyster do
-
-
+  subject(:new_card) {described_class.new}
+  subject(:topped_up_card) {described_class.new}
+  subject(:touch_in_card) {described_class.new}
+  let(:entry_station) {double :entry_station}
+  let(:exit_station) {double :exit_station}
+  before do
+  topped_up_card.top_up(30)
+  touch_in_card.top_up(30)
+  touch_in_card.touch_in(entry_station)
+  end
   context "when initialized" do
       it "has a default balance" do
-      expect(subject.balance).to eq 0
+      expect(new_card.balance).to eq 0
       end
   end
 
   describe "#top_up" do
       context "when given a value" do
       it "adds value to balance" do
-      before = subject.balance
-      expect(subject.top_up(10)).to eq before + 10
+      before = new_card.balance
+      expect(new_card.top_up(10)).to eq before + 10
       end
     end
 
       context "when value given exceeds the limit" do
-      it "raises an error" do
-        subject.top_up(90)
-        expect{subject.top_up(1)}.to raise_error "Amount exceeds limit"
+        it "raises an error" do
+        expect{topped_up_card.top_up(70)}.to raise_error "Amount exceeds limit"
       end
     end
   end
 
     describe "#touch in" do
-      let(:entry_station) {double :entry_station}
-        it { is_expected.to respond_to(:touch_in).with(1).argument}
-        it "expects touch in to start a journey" do
-        subject.top_up(30)
-        subject.touch_in(entry_station)
-        expect(subject).to be_in_journey
+        it 'should create journey on touch in' do
+          new_card.top_up(30)
+          expect(new_card.touch_in(entry_station)).to be_a_kind_of Journey
         end
       end
-        let(:entry_station) {double :entry_station}
-        it 'should create journey on touch in' do
-          subject.top_up(30)
-          expect(subject.touch_in(entry_station)).to be_a_kind_of Journey
-        end
-
     describe "Insufficient fund error" do
-      let(:entry_station) {double :entry_station}
       it "raise an error if insufficient balance" do
-      expect { subject.touch_in(entry_station) }.to raise_error "Insufficient balance to travel"
+      expect { new_card.touch_in(entry_station) }.to raise_error "Insufficient balance to travel"
       end
     end
-
     describe "#touch out" do
-      let(:exit_station) {double :exit_station}
         it { is_expected.to respond_to(:touch_out).with(1).argument}
         it "expects touch out to finish the journey" do
-          subject.top_up(30)
-          subject.touch_in(entry_station)
-          subject.touch_out(exit_station)
-          expect(subject).not_to be_in_journey
+          touch_in_card.touch_out(exit_station)
+          expect(touch_in_card.current_journey).to be nil
         end
-      describe "deduct fare" do
+    end
+    describe "deduct fare" do
         let(:exit_station) {double :exit_station}
         it "expects touch out to reduce balance by 'fare'" do
-          subject.top_up(30)
-          subject.touch_in(entry_station)
-          expect {subject.touch_out(exit_station)}.to change{subject.balance}.by(-2)
+        expect {touch_in_card.touch_out(exit_station)}.to change{touch_in_card.balance}.by(-(Journey::MIN_FARE))
         end
-      end
     end
 
-      describe "#in_journey?" do
-        it { is_expected.to respond_to(:in_journey?) }
-      end
-    end
+  end

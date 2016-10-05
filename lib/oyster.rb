@@ -1,7 +1,7 @@
 require_relative 'journey'
 require_relative 'station'
 class Oyster
-  attr_reader :balance, :limit, :entry_station, :exit_station
+  attr_reader :balance, :limit, :entry_station, :exit_station, :current_journey
   MAXIMUM_LIMIT = 90
   MIN_BALANCE = 1
 
@@ -13,7 +13,6 @@ class Oyster
   def top_up(amount)
     raise "Amount exceeds limit" if amount + @balance > MAXIMUM_LIMIT
     @balance += amount
-    return @balance
   end
 
   def touch_in(entry_station)
@@ -22,17 +21,13 @@ class Oyster
   end
 
   def touch_out(exit_station)
-    deduct(2)
-    @current_journey.set_exit_station(exit_station)
+    @current_journey = Journey.new(nil, exit_station) if @current_journey.nil?
+    deduct_fare(exit_station)
     @current_journey = nil
   end
 
-  def in_journey?
-    !!@current_journey
-  end
-
   private
-  def deduct(amount)
-    @balance -= amount
+  def deduct_fare(exit_station)
+    @balance -= (@current_journey.finish(exit_station))
   end
 end

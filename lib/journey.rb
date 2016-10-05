@@ -3,6 +3,8 @@ require_relative 'oyster'
 class Journey
 
   attr_reader :entry_station, :exit_station
+  MIN_FARE =1
+  PENALTY_FARE = 6
 
 @@journeys = []
 
@@ -21,10 +23,15 @@ class Journey
   end
 
   def fare
-    if @entry_station = nil || @exit_station= nil
-      fare = 6
-    else
-      fare = 2
-    end
+    journey_complete? ? MIN_FARE : PENALTY_FARE
+  end
+
+  def journey_complete?
+    !(@entry_station.nil? || @exit_station.nil?)
+  end
+
+  def finish (exit_station)
+  set_exit_station(exit_station)
+  fare
   end
 end
