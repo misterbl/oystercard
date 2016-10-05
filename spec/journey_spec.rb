@@ -11,9 +11,11 @@ describe Journey do
   describe "#fare" do
     let(:entry_station) {double :entry_station}
     let(:exit_station) {double :exit_station}
+    subject(:journey) {described_class.new(:entry_station,:exit_station)}
+
     it "charge the right fare" do
-    subject.entry_station != nil and subject.exit_station != nil
-    expect{subject.fare}.eq 2
+    journey.entry_station != nil and journey.exit_station != nil
+    expect(journey.fare).to eq 2
   end
   end
 end

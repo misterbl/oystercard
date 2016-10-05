@@ -1,22 +1,23 @@
 require_relative 'oyster'
 
-class Journey < Hash
+class Journey
+
+  attr_reader :entry_station, :exit_station
 
 @@journeys = []
 
   def initialize(entry_station, exit_station)
     @entry_station = entry_station
     @exit_station = exit_station
-  end
-
-    def create_journey
-    self[:start] = @entry_station
-    self[:finish] = @exit_station
     @@journeys << self
-    end
+  end
 
   def self.journeys
     @@journeys
+  end
+
+  def set_exit_station(exit_station)
+    @exit_station = exit_station
   end
 
   def fare

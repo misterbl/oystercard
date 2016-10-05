@@ -7,6 +7,7 @@ class Oyster
 
   def initialize
     @balance = 0
+    @current_journey = nil
   end
 
   def top_up(amount)
@@ -17,25 +18,17 @@ class Oyster
 
   def touch_in(entry_station)
     raise "Insufficient balance to travel" if @balance < MIN_BALANCE
-    @entry_station = entry_station
-    @entry_station
+    @current_journey = Journey.new(entry_station, nil)
   end
 
   def touch_out(exit_station)
     deduct(2)
-    @exit_station = exit_station
-    #@entry_station = nil
-    journey_summary
-    @exit_station
-  end
-
-  def journey_summary
-      @current_journey = Journey.new(@entry_station, @exit_station)
-      @current_journey.create_journey
+    @current_journey.set_exit_station(exit_station)
+    @current_journey = nil
   end
 
   def in_journey?
-    !!entry_station
+    !!@current_journey
   end
 
   private

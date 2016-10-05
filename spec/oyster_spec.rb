@@ -2,6 +2,7 @@ require 'oyster'
 
 describe Oyster do
 
+
   context "when initialized" do
       it "has a default balance" do
       expect(subject.balance).to eq 0
@@ -34,9 +35,9 @@ describe Oyster do
         end
       end
         let(:entry_station) {double :entry_station}
-        it "Record the entry station" do
-        subject.top_up(30)
-        expect(subject.touch_in(entry_station)).to eq(entry_station)
+        it 'should create journey on touch in' do
+          subject.top_up(30)
+          expect(subject.touch_in(entry_station)).to be_a_kind_of Journey
         end
 
     describe "Insufficient fund error" do
@@ -50,19 +51,17 @@ describe Oyster do
       let(:exit_station) {double :exit_station}
         it { is_expected.to respond_to(:touch_out).with(1).argument}
         it "expects touch out to finish the journey" do
-        subject.touch_out(exit_station)
-        expect(subject).not_to be_in_journey
+          subject.top_up(30)
+          subject.touch_in(entry_station)
+          subject.touch_out(exit_station)
+          expect(subject).not_to be_in_journey
         end
       describe "deduct fare" do
         let(:exit_station) {double :exit_station}
         it "expects touch out to reduce balance by 'fare'" do
+          subject.top_up(30)
+          subject.touch_in(entry_station)
           expect {subject.touch_out(exit_station)}.to change{subject.balance}.by(-2)
-        end
-      end
-      describe "Record exit station" do
-        let(:exit_station) {double :exit_station}
-        it "Record the exit station" do
-        expect(subject.touch_out(exit_station)).to eq(exit_station)
         end
       end
     end
