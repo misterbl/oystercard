@@ -47,7 +47,7 @@ describe Oyster do
         it { is_expected.to respond_to(:touch_out).with(1).argument}
         it "expects touch out to finish the journey" do
           touch_in_card.touch_out(exit_station)
-          expect(touch_in_card.current_journey).to be nil
+          expect(touch_in_card.current_journey).not_to be nil
         end
     end
     describe "deduct fare" do

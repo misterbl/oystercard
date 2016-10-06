@@ -7,7 +7,8 @@ class Oyster
 
   def initialize
     @balance = 0
-    @current_journey = nil
+    reset_journey
+    @journey_log = JourneyLog.new
   end
 
   def top_up(amount)
@@ -23,11 +24,19 @@ class Oyster
   def touch_out(exit_station)
     @current_journey = Journey.new(nil, exit_station) if @current_journey.nil?
     deduct_fare(exit_station)
-    @current_journey = nil
+  end
+
+  def log_journey
+    @journey_log.log(@current_journey)
+    reset_journey
   end
 
   private
-  def deduct_fare(exit_station)
-    @balance -= (@current_journey.finish(exit_station))
-  end
+    def reset_journey
+      @current_journey = nil
+    end
+
+    def deduct_fare(exit_station)
+      @balance -= (@current_journey.finish(exit_station))
+    end
 end

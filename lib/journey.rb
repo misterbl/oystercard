@@ -13,12 +13,9 @@ class Journey
     @exit_station = exit_station
   end
 
-  def self.journeys
-    @@journeys
-  end
-
   def set_exit_station(exit_station)
     @exit_station = exit_station
+
   end
 
   def fare
