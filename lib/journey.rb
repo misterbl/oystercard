@@ -6,12 +6,11 @@ class Journey
   MIN_FARE =1
   PENALTY_FARE = 6
 
-@@journeys = []
+
 
   def initialize(entry_station, exit_station)
     @entry_station = entry_station
     @exit_station = exit_station
-    @@journeys << self
   end
 
   def self.journeys
